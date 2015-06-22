@@ -18,6 +18,14 @@ DB.create_table? :users do
   String :password_digest, null: false
 end
 
+DB.create_table? :notes do
+  primary_key :id
+  String :message 
+end
+
+class Note < Sequel::Model; end
+
+
 class User < Sequel::Model
   plugin :secure_password
   plugin :validation_helpers
@@ -60,6 +68,26 @@ end
 
 get '/register' do
   haml :register
+end
+
+get '/notes' do
+  @notes = Note.all
+  haml :notes
+end
+
+post '/notes' do
+  note = Note.new
+  note.message = params[:message]
+  note.id = params[:id]
+  note.save
+  halt 201
+
+end
+
+get '/notes/:id/delete' do
+  #Note.get(params[:id]).destroy 
+  Note.where(id: params[:id]).delete
+  redirect '/notes'
 end
 
 post '/register' do

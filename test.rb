@@ -16,15 +16,26 @@ DB.create_table? :users do
   primary_key :id
   String :name, unique: true, null: false
   String :password_digest, null: false
+  Bool :is_admin, null: false
 end
 
 DB.create_table? :notes do
   primary_key :id
-  String :message 
+  String :message, null: false
+  User :user, null: false
 end
+
+DB.create_table? :user_notes do
+  User :user, null: false
+  Note :note, null: false
+  primary_key [:user, :note], name: :pk
+end
+
+
 
 class Note < Sequel::Model; end
 
+class UserNote < Sequel::Model; end
 
 class User < Sequel::Model
   plugin :secure_password
@@ -41,7 +52,7 @@ enable :sessions
 helpers do
   def authenticated!
     u = authenticated?
-    halt 403, 'Not authorized' if u.nil?
+    halt 401, 'Not authorized' if u.nil?
     return u
   end
 
@@ -78,16 +89,30 @@ end
 post '/notes' do
   note = Note.new
   note.message = params[:message]
-  note.id = params[:id]
+  note.user = authenticated!.id
   note.save
-  halt 201
-
+  @notes = Note.all
+  haml :notes
 end
 
 get '/notes/:id/delete' do
-  #Note.get(params[:id]).destroy 
+  note = Note.first(id: params[:id])
+  halt 403, 'Forbidden!' if note.user != authenticated!.id && ! authenticated!.is_admin
   Note.where(id: params[:id]).delete
-  redirect '/notes'
+  redirect back
+end
+
+get '/notes/:id/checkout' do
+  UserNote.where(note: params[:id], user: authenticated!.id).delete
+  redirect back
+end
+
+get '/notes/:id/checkin' do
+  user_note = UserNote.new
+  user_note.note = params[:id]
+  user_note.user = authenticated!.id
+  user_note.save
+  redirect back
 end
 
 post '/register' do
@@ -95,6 +120,7 @@ post '/register' do
   user.name = params[:name]
   user.password = params[:password]
   user.password_confirmation = params[:password_confirmation]
+  user.is_admin = !params[:is_admin].nil?
   if not user.valid?
     user.errors.each { |field, error| flash[field] = "#{field}: #{error}" }
     redirect back

@@ -12,6 +12,11 @@
     %button Submit
 
   - @notes.each do |note|
-    %p=  note.message
+    %p= UserNote.where(note: note.id).count
+    %p= note.message
     %p
       %a{href: "/notes/#{note.id}/delete" } Delete
+    %p
+      %a{href: "/notes/#{note.id}/checkout" } -
+    %p
+      %a{href: "/notes/#{note.id}/checkin" } +

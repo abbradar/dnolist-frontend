@@ -6,6 +6,9 @@
     %a{href: "/login"} Log in
 - else
   %p You are logged in as #{authenticated?.name}
+  - if authenticated?.is_admin
+    %p
+    Khui
   %p
     %form{method: 'post', action: '/logout'}
       %button Logout

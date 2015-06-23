@@ -19,23 +19,24 @@ DB.create_table? :users do
   Bool :is_admin, null: false
 end
 
-DB.create_table? :notes do
+DB.create_table? :mail_lists do
   primary_key :id
-  String :message, null: false
+  String :address, null: false, unique: true
+  String :title, null: false
   User :user, null: false
 end
 
-DB.create_table? :user_notes do
+DB.create_table? :mail_users do
   User :user, null: false
-  Note :note, null: false
-  primary_key [:user, :note], name: :pk
+  MailList :mail_list, null: false
+  primary_key [:user, :mail_list], name: :pk
 end
 
 
 
-class Note < Sequel::Model; end
+class MailList < Sequel::Model; end
 
-class UserNote < Sequel::Model; end
+class MailUser < Sequel::Model; end
 
 class User < Sequel::Model
   plugin :secure_password
@@ -81,37 +82,38 @@ get '/register' do
   haml :register
 end
 
-get '/notes' do
-  @notes = Note.all
-  haml :notes
+get '/lists' do
+  @mail_lists = MailList.all
+  haml :lists
 end
 
-post '/notes' do
-  note = Note.new
-  note.message = params[:message]
-  note.user = authenticated!.id
-  note.save
-  @notes = Note.all
-  haml :notes
+post '/lists' do
+  mail_list = MailList.new
+  mail_list.address = params[:address]
+  mail_list.title = params[:title]
+  mail_list.user = authenticated!.id
+  mail_list.save
+  @mail_lists = MailList.all
+  haml :lists
 end
 
-get '/notes/:id/delete' do
-  note = Note.first(id: params[:id])
-  halt 403, 'Forbidden!' if note.user != authenticated!.id && ! authenticated!.is_admin
-  Note.where(id: params[:id]).delete
+get '/lists/:id/delete' do
+  mail_list = MailList.first(id: params[:id])
+  halt 403, 'Forbidden!' if mail_list.user != authenticated!.id && ! authenticated!.is_admin
+  MailList.where(id: params[:id]).delete
   redirect back
 end
 
-get '/notes/:id/checkout' do
-  UserNote.where(note: params[:id], user: authenticated!.id).delete
+get '/lists/:id/checkout' do
+  MailUser.where(mail_list: params[:id], user: authenticated!.id).delete
   redirect back
 end
 
-get '/notes/:id/checkin' do
-  user_note = UserNote.new
-  user_note.note = params[:id]
-  user_note.user = authenticated!.id
-  user_note.save
+get '/lists/:id/checkin' do
+  mail_user = MailUser.new
+  mail_user.mail_list = params[:id]
+  mail_user.user = authenticated!.id
+  mail_user.save
   redirect back
 end
 

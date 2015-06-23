@@ -1,0 +1,24 @@
+- if authenticated?.nil?
+  %p You are not logged in!
+  %p
+    %a{href: "/login"} Login
+
+- else
+  %form{method: 'post'}
+    %p
+      Title:
+      %input{type: 'text', name: 'title'}
+        %p
+      Address:
+      %input{type: 'text', name: 'address'}
+
+    %button Submit
+
+  - @mail_lists.each do |mail_list|
+    %p= MailUser.where(mail_list: mail_list.id).count
+    = mail_list.address 
+    = mail_list.title
+    %p
+      %a{href: "/lists/#{mail_list.id}/delete" } Delete
+      %a{href: "/lists/#{mail_list.id}/checkout" } -
+      %a{href: "/lists/#{mail_list.id}/checkin" } +

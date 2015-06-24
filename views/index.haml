@@ -8,8 +8,11 @@
   %p You are logged in as #{authenticated?.name}
   - if authenticated?.is_admin
     %p
-    Khui
+    You are the administrator
   %p
     %form{method: 'post', action: '/logout'}
       %button Logout
+
+  %a{href: "/profile/#{authenticated?.id}" } Your mail lists
+  %p
   %a{href: "/lists"} Add new list

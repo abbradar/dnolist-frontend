@@ -5,12 +5,14 @@ require 'bundler/setup'
 
 require 'sequel'
 require 'sequel_secure_password'
+require 'logger'
 require 'sinatra'
 require 'sinatra/flash'
 require 'sinatra/redirect_with_flash'
 require 'haml'
 
-DB = Sequel.connect 'sqlite://test.db'
+DB = Sequel.connect 'sqlite://test.db', loggers: [Logger.new($stderr)]
+DB.sql_log_level = :debug
 
 DB.create_table? :users do
   primary_key :id
@@ -31,8 +33,6 @@ DB.create_table? :mail_users do
   MailList :mail_list, null: false
   primary_key [:user, :mail_list], name: :pk
 end
-
-
 
 class MailList < Sequel::Model; end
 
@@ -135,3 +135,16 @@ post '/logout' do
   session.delete :userid
   redirect back, notice: 'Logged out!'
 end
+
+get '/contents/:id' do
+  halt 403, "Forbidden!" unless authenticated!.is_admin
+  @mail_list = MailList.first(id: params[:id])
+  @contents = User.where(id: MailUser.where(mail_list: params[:id]).select(:user))
+  haml  :list_contents
+end
+
+get '/profile/:id' do
+  @user_lists = MailList.where(id: MailUser.where(user: authenticated!.id).select(:mail_list))
+  haml :profile
+end 
+

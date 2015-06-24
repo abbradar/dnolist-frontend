@@ -1,0 +1,4 @@
+%p= @mail_list.title
+%p= @mail_list.address
+- @contents.each do |content|
+  %p= content.name

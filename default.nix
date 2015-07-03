@@ -18,6 +18,7 @@ in stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -p $out
+    cd $src
     cp frontend.rb $out
     cp -r views $out
     patchShebangs $out/frontend.rb

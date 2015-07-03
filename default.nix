@@ -14,6 +14,7 @@ in stdenv.mkDerivation {
 
   src = ./.;
 
+  buildInputs = [ ruby ];
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
@@ -25,4 +26,6 @@ in stdenv.mkDerivation {
     wrapProgram $out/frontend.rb \
       ${lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "--set ${k} ${v}") env.vars)}
   '';
+
+  passthru.env = env.env;
 }

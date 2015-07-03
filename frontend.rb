@@ -13,8 +13,9 @@ require 'haml'
 
 session = "http://database:8081"
 sysop = "http://database:8082"
-
+set :bind, '0.0.0.0'
 set :port, 80
+
 enable :sessions
 
 helpers do

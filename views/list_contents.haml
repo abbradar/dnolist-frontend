@@ -1,4 +1,4 @@
-%p= @mail_list.title
-%p= @mail_list.address
+%p= @mail_list['title']
+%p= @mail_list['name']
 - @contents.each do |content|
-  %p= content.name
+  %p= content[1]

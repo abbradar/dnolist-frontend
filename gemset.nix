@@ -1,10 +1,13 @@
 {
-  "bcrypt" = {
-    version = "3.1.10";
+  "domain_name" = {
+    version = "0.5.24";
     source = {
       type = "gem";
-      sha256 = "15cf7zzlj9b0xcx12jf8fmnpc8g1b0yhxal1yr5p7ny3mrz5pll6";
+      sha256 = "1xjm5arwc35wryn0hbfldx2pfhwx5qilkv7yms4kz0jri3m6mgcc";
     };
+    dependencies = [
+      "unf"
+    ];
   };
   "haml" = {
     version = "4.0.6";
@@ -16,11 +19,42 @@
       "tilt"
     ];
   };
-  "rack" = {
-    version = "1.5.2";
+  "http-cookie" = {
+    version = "1.0.2";
     source = {
       type = "gem";
-      sha256 = "19szfw76cscrzjldvw30jp3461zl00w4xvw1x9lsmyp86h1g0jp6";
+      sha256 = "0cz2fdkngs3jc5w32a6xcl511hy03a7zdiy988jk1sf3bf5v3hdw";
+    };
+    dependencies = [
+      "domain_name"
+    ];
+  };
+  "json" = {
+    version = "1.8.3";
+    source = {
+      type = "gem";
+      sha256 = "1nsby6ry8l9xg3yw4adlhk2pnc7i0h0rznvcss4vk3v74qg0k8lc";
+    };
+  };
+  "mime-types" = {
+    version = "2.6.1";
+    source = {
+      type = "gem";
+      sha256 = "1vnrvf245ijfyxzjbj9dr6i1hkjbyrh4yj88865wv9bs75axc5jv";
+    };
+  };
+  "netrc" = {
+    version = "0.10.3";
+    source = {
+      type = "gem";
+      sha256 = "1r6cmg1nvxspl24yrqn77vx7xjqigpypialblpcv5qj6xmc4b8lg";
+    };
+  };
+  "rack" = {
+    version = "1.6.4";
+    source = {
+      type = "gem";
+      sha256 = "09bs295yq6csjnkzj7ncj50i6chfxrhmzg1pk6p0vd2lb9ac8pj5";
     };
   };
   "rack-protection" = {
@@ -33,39 +67,23 @@
       "rack"
     ];
   };
-  "sequel" = {
-    version = "4.19.0";
+  "rest-client" = {
+    version = "1.8.0";
     source = {
       type = "gem";
-      sha256 = "10qyfskhq0p8l7y86v5avnpy811i5pxkgn8y6vrxmyll73qcaflp";
-    };
-  };
-  "sequel_secure_password" = {
-    version = "0.2.11";
-    source = {
-      type = "gem";
-      sha256 = "1in0dq955v93mm1vsj7ad3r4dbd807glnwd9jaxa2zmnpmggq9l3";
+      sha256 = "1m8z0c4yf6w47iqz6j2p7x1ip4qnnzvhdph9d5fgx081cvjly3p7";
     };
     dependencies = [
-      "bcrypt"
-      "sequel"
-    ];
-  };
-  "shotgun" = {
-    version = "0.9";
-    source = {
-      type = "gem";
-      sha256 = "19a5a0qi137hckcw1hhvk2wym2l4zdbmi6252f23cjj9z5gjh62m";
-    };
-    dependencies = [
-      "rack"
+      "http-cookie"
+      "mime-types"
+      "netrc"
     ];
   };
   "sinatra" = {
-    version = "1.4.5";
+    version = "1.4.6";
     source = {
       type = "gem";
-      sha256 = "0qyna3wzlnvsz69d21lxcm3ixq7db08mi08l0a88011qi4qq701s";
+      sha256 = "1hhmwqc81ram7lfwwziv0z70jh92sj1m7h7s9fr0cn2xq8mmn8l7";
     };
     dependencies = [
       "rack"
@@ -93,18 +111,28 @@
       "sinatra"
     ];
   };
-  "sqlite3" = {
-    version = "1.3.10";
+  "tilt" = {
+    version = "2.0.1";
     source = {
       type = "gem";
-      sha256 = "1qzg74nrzlwxz0ykxdg4m2bl5vqyh796y8wbnsh315mxhjz1bn3h";
+      sha256 = "1qc1k2r6whnb006m10751dyz3168cq72vj8mgp5m2hpys8n6xp3k";
     };
   };
-  "tilt" = {
-    version = "1.4.1";
+  "unf" = {
+    version = "0.1.4";
     source = {
       type = "gem";
-      sha256 = "00sr3yy7sbqaq7cb2d2kpycajxqf1b1wr1yy33z4bnzmqii0b0ir";
+      sha256 = "0bh2cf73i2ffh4fcpdn9ir4mhq8zi50ik0zqa1braahzadx536a9";
+    };
+    dependencies = [
+      "unf_ext"
+    ];
+  };
+  "unf_ext" = {
+    version = "0.0.7.1";
+    source = {
+      type = "gem";
+      sha256 = "0ly2ms6c3irmbr1575ldyh52bz2v0lzzr2gagf0p526k12ld2n5b";
     };
   };
 }
